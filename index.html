@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Ingreso de Personal | TOOLTEK</title>
+<link rel="icon" href="assets/tooltek-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#25638F;
+    --teal:#0081B0;
+    --light:#91CADE;
+    --bg:#F5F8FA;
+    --white:#FFFFFF;
+    --gray-label:#F2F6F9;
+    --gray-border:#D7E4EA;
+    --text:#233238;
+    --danger:#C0392B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.4;
+  }
+  header{
+    background:var(--white);
+    border-bottom:3px solid var(--navy);
+    padding:18px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  header .brandtext p{
+    margin:0;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:600;
+    color:var(--teal);
+    letter-spacing:.04em;
+    font-size:13px;
+    text-transform:uppercase;
+  }
+  header h1{
+    margin:2px 0 0;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    color:var(--navy);
+    font-size:26px;
+    letter-spacing:.02em;
+  }
+  header img{height:44px;}
+
+  .banner{
+    background:var(--navy);
+    color:var(--white);
+    text-align:center;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:600;
+    letter-spacing:.06em;
+    padding:10px;
+    font-size:15px;
+    text-transform:uppercase;
+  }
+
+  main{
+    max-width:900px;
+    margin:0 auto;
+    padding:24px 18px 80px;
+  }
+
+  fieldset{
+    border:1px solid var(--gray-border);
+    border-radius:8px;
+    background:var(--white);
+    margin:0 0 22px;
+    padding:18px 20px 20px;
+  }
+  legend{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    color:var(--navy);
+    font-size:19px;
+    padding:0 8px;
+  }
+  .sub{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:600;
+    color:var(--teal);
+    font-size:15px;
+    margin:14px 0 8px;
+    border-bottom:1px solid var(--gray-border);
+    padding-bottom:4px;
+  }
+  .note{
+    font-size:12.5px;
+    color:#667;
+    font-style:italic;
+    margin:4px 0 10px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px 16px;
+  }
+  .grid.single{grid-template-columns:1fr;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field.full{grid-column:1 / -1;}
+  label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--navy);
+  }
+  label .opt{font-weight:400;color:#7a8a92;font-style:italic;}
+  input[type=text],
+  input[type=email],
+  input[type=tel],
+  input[type=date],
+  input[type=number],
+  select,
+  textarea{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+    padding:9px 10px;
+    border:1px solid var(--gray-border);
+    border-radius:5px;
+    background:var(--white);
+    color:var(--text);
+    width:100%;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(0,129,176,.15);
+  }
+  .radio-row, .check-row{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    align-items:center;
+    padding-top:4px;
+  }
+  .radio-row label, .check-row label{
+    font-weight:400;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+  }
+
+  .formacion-table{width:100%;border-collapse:collapse;margin-top:6px;}
+  .formacion-table th{
+    background:var(--gray-label);
+    color:var(--navy);
+    font-size:12.5px;
+    text-align:left;
+    padding:7px 8px;
+    border:1px solid var(--gray-border);
+  }
+  .formacion-table td{
+    border:1px solid var(--gray-border);
+    padding:5px 6px;
+  }
+  .formacion-table td:first-child{
+    background:var(--gray-label);
+    font-weight:600;
+    font-size:13px;
+    color:var(--navy);
+    white-space:nowrap;
+  }
+  .formacion-table input{border:none;padding:6px 4px;font-size:13px;}
+  .formacion-table input:focus{box-shadow:none;background:#eef7fb;}
+
+  .consent{
+    background:var(--gray-label);
+    border:1px solid var(--gray-border);
+    border-radius:6px;
+    padding:14px 16px;
+    font-size:13.5px;
+  }
+  .consent label{
+    font-weight:400;
+    color:var(--text);
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .consent input{margin-top:3px;}
+
+  .submit-row{
+    text-align:center;
+    margin-top:24px;
+  }
+  button{
+    background:var(--navy);
+    color:var(--white);
+    border:none;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:.04em;
+    padding:14px 44px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  button:hover{background:var(--teal);}
+  button:disabled{background:#a9b7bd;cursor:not-allowed;}
+
+  #status{
+    max-width:900px;
+    margin:0 auto 10px;
+    padding:0 18px;
+    text-align:center;
+    font-weight:600;
+    font-size:14px;
+  }
+  #status.ok{color:#1e7e34;}
+  #status.err{color:var(--danger);}
+
+  .required:after{content:" *";color:var(--danger);}
+
+  .sig-wrap{
+    border:1px dashed var(--gray-border);
+    border-radius:6px;
+    background:var(--white);
+    touch-action:none;
+    overflow:hidden;
+  }
+  #sig-pad{
+    display:block;
+    width:100%;
+    height:200px;
+    background:var(--white);
+    cursor:crosshair;
+  }
+  .sig-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:8px;
+  }
+  .btn-secondary{
+    background:var(--white);
+    color:var(--navy);
+    border:1px solid var(--navy);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    padding:8px 16px;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-secondary:hover{background:var(--gray-label);}
+  #sig-hint.ok{color:#1e7e34;font-style:normal;font-weight:600;}
+
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--teal);
+    font-style:italic;
+    padding:20px;
+  }
+
+  .success-screen{
+    max-width:600px;
+    margin:60px auto;
+    text-align:center;
+    background:var(--white);
+    border:1px solid var(--gray-border);
+    border-radius:8px;
+    padding:40px 30px;
+  }
+  .success-screen h2{color:var(--navy);font-family:'Barlow Condensed',sans-serif;}
+
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;}
+    header{padding:14px 16px;}
+    header h1{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brandtext">
+    <p>Administración y Finanzas — Recursos Humanos</p>
+    <h1>Ficha de Ingreso de Personal</h1>
+  </div>
+  <img src="assets/tooltek-logo.png" alt="TOOLTEK®">
+</header>
+<div class="banner">Hoja 1 — A completar por el postulante / trabajador nuevo</div>
+
+<main>
+  <div id="status"></div>
+
+  <form id="ficha-form">
+
+    <fieldset>
+      <legend>1. Datos personales</legend>
+      <div class="grid">
+        <div class="field"><label class="required">Nombres</label><input type="text" name="nombres" required></div>
+        <div class="field"><label class="required">Apellidos</label><input type="text" name="apellidos" required></div>
+        <div class="field"><label class="required">RUT</label><input type="text" name="rut" placeholder="12.345.678-9" required></div>
+        <div class="field"><label>Fecha de nacimiento</label><input type="date" name="fecha_nacimiento"></div>
+        <div class="field"><label>Nacionalidad</label><input type="text" name="nacionalidad"></div>
+        <div class="field">
+          <label>Estado civil</label>
+          <select name="estado_civil">
+            <option value=""></option>
+            <option>Soltero/a</option>
+            <option>Casado/a</option>
+            <option>Conviviente Civil</option>
+            <option>Divorciado/a</option>
+            <option>Viudo/a</option>
+          </select>
+        </div>
+        <div class="field full"><label>Domicilio (dirección)</label><input type="text" name="domicilio"></div>
+        <div class="field"><label>Comuna</label><input type="text" name="comuna"></div>
+        <div class="field"><label>Ciudad</label><input type="text" name="ciudad"></div>
+        <div class="field"><label>Teléfono</label><input type="tel" name="telefono"></div>
+        <div class="field"><label>Celular</label><input type="tel" name="celular"></div>
+        <div class="field full"><label class="required">Correo electrónico</label><input type="email" name="correo" required></div>
+        <div class="field"><label>Área de trabajo <span class="opt">(si la conoce)</span></label><input type="text" name="area_trabajo"></div>
+      </div>
+
+      <div class="sub">Hijos</div>
+      <div class="grid">
+        <div class="field">
+          <label>¿Tiene hijos?</label>
+          <div class="radio-row">
+            <label><input type="radio" name="tiene_hijos" value="Sí"> Sí</label>
+            <label><input type="radio" name="tiene_hijos" value="No"> No</label>
+          </div>
+        </div>
+        <div class="field"><label>Cantidad y edades</label><input type="text" name="hijos_detalle" placeholder="Ej: 2 (8 y 12 años)"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Previsión</legend>
+      <div class="grid">
+        <div class="field">
+          <label>AFP</label>
+          <select name="afp">
+            <option value=""></option>
+            <option>Capital</option>
+            <option>Cuprum</option>
+            <option>Habitat</option>
+            <option>Modelo</option>
+            <option>PlanVital</option>
+            <option>ProVida</option>
+            <option>Uno</option>
+          </select>
+        </div>
+        <div class="field"><label>Fecha de afiliación AFP</label><input type="date" name="fecha_afiliacion_afp"></div>
+        <div class="field">
+          <label>Sistema de salud</label>
+          <select name="sistema_salud" id="sistema_salud">
+            <option value=""></option>
+            <option>Fonasa</option>
+            <option>Isapre</option>
+          </select>
+        </div>
+        <div class="field"><label>Nombre Isapre y N° de Plan</label><input type="text" name="isapre_plan"></div>
+        <div class="field"><label>Valor plan de salud</label><input type="text" name="valor_plan_salud" placeholder="UF"></div>
+      </div>
+      <p class="note">*Es imprescindible enviar por correo a RRHH los certificados de afiliación a la AFP y de la Isapre (Fonasa no es necesario) — este formulario no adjunta archivos.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Salud y contacto de emergencia</legend>
+      <div class="grid">
+        <div class="field"><label>Enfermedad base</label><input type="text" name="enfermedad_base"></div>
+        <div class="field"><label>Alergia a algún medicamento</label><input type="text" name="alergia_medicamento"></div>
+        <div class="field full"><label>Medicamento que toma diariamente</label><input type="text" name="medicamento_diario"></div>
+        <div class="field"><label>En caso de emergencia, llamar a</label><input type="text" name="contacto_emergencia"></div>
+        <div class="field"><label>Teléfono de emergencia</label><input type="tel" name="telefono_emergencia"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Autorización depósito en cuenta corriente</legend>
+      <p class="note">Autorizo a TOOLTEK SpA para depositar mis ingresos en la cuenta que a continuación detallo. Los datos de nombre y RUT se toman de la sección 1.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Banco</label>
+          <select name="banco">
+            <option value=""></option>
+            <option>Banco de Chile</option>
+            <option>BancoEstado</option>
+            <option>Santander</option>
+            <option>BCI</option>
+            <option>Scotiabank</option>
+            <option>Itaú</option>
+            <option>Banco Security</option>
+            <option>Banco Falabella</option>
+            <option>Banco Ripley</option>
+            <option>Banco Consorcio</option>
+            <option>BICE</option>
+            <option>HSBC</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field"><label>Sucursal</label><input type="text" name="sucursal"></div>
+        <div class="field">
+          <label>Tipo de cuenta</label>
+          <select name="tipo_cuenta">
+            <option value=""></option>
+            <option>Cuenta Corriente</option>
+            <option>Cuenta Vista / RUT</option>
+            <option>Cuenta de Ahorro</option>
+          </select>
+        </div>
+        <div class="field"><label>N° de cuenta</label><input type="text" name="numero_cuenta"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>5. Formación <span class="opt">(opcional)</span></legend>
+      <table class="formacion-table">
+        <thead>
+          <tr><th></th><th>Nombre del grado o título</th><th>Institución donde lo obtuvo</th><th>Año</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Título profesional</td>
+            <td><input type="text" name="form_titulo_nombre"></td>
+            <td><input type="text" name="form_titulo_inst"></td>
+            <td><input type="text" name="form_titulo_anio"></td>
+          </tr>
+          <tr>
+            <td>Grado académico</td>
+            <td><input type="text" name="form_grado_nombre"></td>
+            <td><input type="text" name="form_grado_inst"></td>
+            <td><input type="text" name="form_grado_anio"></td>
+          </tr>
+          <tr>
+            <td>Post título</td>
+            <td><input type="text" name="form_posttitulo_nombre"></td>
+            <td><input type="text" name="form_posttitulo_inst"></td>
+            <td><input type="text" name="form_posttitulo_anio"></td>
+          </tr>
+          <tr>
+            <td>Diplomado</td>
+            <td><input type="text" name="form_diplomado_nombre"></td>
+            <td><input type="text" name="form_diplomado_inst"></td>
+            <td><input type="text" name="form_diplomado_anio"></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend class="required">6. Firma del solicitante</legend>
+      <p class="note">Dibuja tu firma con el dedo (en el celular) o el mouse (en el computador).</p>
+      <div class="sig-wrap">
+        <canvas id="sig-pad" width="600" height="200"></canvas>
+      </div>
+      <div class="sig-actions">
+        <button type="button" id="sig-clear" class="btn-secondary">Borrar firma</button>
+        <span id="sig-hint" class="note" style="margin:0;">Sin firmar</span>
+      </div>
+    </fieldset>
+
+    <div class="consent">
+      <label>
+        <input type="checkbox" name="declaracion" required>
+        <span>Declaro que la información entregada en este formulario es veraz y autorizo a TOOLTEK SpA a utilizarla para los fines administrativos, previsionales y de pago correspondientes a mi ingreso como trabajador/a.</span>
+      </label>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" id="submit-btn">Enviar ficha</button>
+    </div>
+  </form>
+
+  <div class="success-screen" id="success-screen" style="display:none;">
+    <h2>¡Ficha enviada!</h2>
+    <p>Gracias, hemos recibido tu información correctamente. El equipo de RRHH continuará con el proceso de ingreso.</p>
+  </div>
+</main>
+
+<footer>TOOLTEK® — Herramientas para construir el futuro</footer>
+
+<script>
+  // Reemplaza esta URL por la de tu Web App de Google Apps Script una vez desplegada.
+  const SCRIPT_URL = "https://script.google.com/macros/s/TU_ID_DE_DESPLIEGUE/exec";
+
+  const form = document.getElementById('ficha-form');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+
+  // ---------- Cuadro de firma (canvas) ----------
+  const canvas = document.getElementById('sig-pad');
+  const ctx = canvas.getContext('2d');
+  const sigHint = document.getElementById('sig-hint');
+  let drawing = false;
+  let hasSignature = false;
+
+  function resizeCanvas(){
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const prev = hasSignature ? canvas.toDataURL() : null;
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2.2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#233238';
+    if (prev) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      img.src = prev;
+    }
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function getPos(evt){
+    const rect = canvas.getBoundingClientRect();
+    if (evt.touches && evt.touches.length){
+      return { x: evt.touches[0].clientX - rect.left, y: evt.touches[0].clientY - rect.top };
+    }
+    return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+  }
+  function startDraw(evt){
+    evt.preventDefault();
+    drawing = true;
+    hasSignature = true;
+    sigHint.textContent = 'Firma registrada';
+    sigHint.className = 'note ok';
+    const p = getPos(evt);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+  function moveDraw(evt){
+    if (!drawing) return;
+    evt.preventDefault();
+    const p = getPos(evt);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+  function endDraw(evt){
+    if (evt) evt.preventDefault();
+    drawing = false;
+  }
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  window.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive:false });
+  canvas.addEventListener('touchmove', moveDraw, { passive:false });
+  canvas.addEventListener('touchend', endDraw);
+
+  document.getElementById('sig-clear').addEventListener('click', function(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasSignature = false;
+    sigHint.textContent = 'Sin firmar';
+    sigHint.className = 'note';
+  });
+  // ---------- Fin cuadro de firma ----------
+
+  // Mostrar/ocultar campo de Isapre según selección
+  document.getElementById('sistema_salud').addEventListener('change', function(){
+    // Campo siempre visible; solo es informativo, no se oculta para simplicidad y accesibilidad.
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    statusEl.textContent = '';
+    statusEl.className = '';
+
+    if (!hasSignature) {
+      statusEl.textContent = 'Por favor firma en el recuadro antes de enviar la ficha.';
+      statusEl.className = 'err';
+      document.getElementById('sig-pad').scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+
+    if (SCRIPT_URL.includes('TU_ID_DE_DESPLIEGUE')) {
+      statusEl.textContent = 'Falta configurar la URL del Apps Script en index.html (SCRIPT_URL).';
+      statusEl.className = 'err';
+      return;
+    }
+
+    const data = new FormData(form);
+    const payload = {};
+    data.forEach((value, key) => {
+      if (payload[key] !== undefined) {
+        payload[key] = payload[key] + '; ' + value;
+      } else {
+        payload[key] = value;
+      }
+    });
+    payload.fecha_envio = new Date().toISOString();
+    payload.firma_base64 = canvas.toDataURL('image/png');
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.result === 'success') {
+        form.style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo(0,0);
+      } else {
+        throw new Error(res.error || 'Error desconocido');
+      }
+    })
+    .catch(err => {
+      statusEl.textContent = 'No se pudo enviar la ficha. Intenta nuevamente o contacta a RRHH. (' + err.message + ')';
+      statusEl.className = 'err';
+      btn.disabled = false;
+      btn.textContent = 'Enviar ficha';
+    });
+  });
+</script>
+
+</body>
+</html>
