@@ -140,6 +140,21 @@
     border-color:var(--teal);
     box-shadow:0 0 0 3px rgba(0,129,176,.15);
   }
+  input[type=file]{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    padding:8px 10px;
+    border:1px solid var(--gray-border);
+    border-radius:5px;
+    background:var(--white);
+    width:100%;
+  }
+  input[type=file]:focus{
+    outline:none;
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(0,129,176,.15);
+  }
+
   .radio-row, .check-row{
     display:flex;
     gap:18px;
@@ -349,8 +364,8 @@
       <legend>2. Previsión</legend>
       <div class="grid">
         <div class="field">
-          <label>AFP</label>
-          <select name="afp">
+          <label class="required">AFP</label>
+          <select name="afp" required>
             <option value=""></option>
             <option>Capital</option>
             <option>Cuprum</option>
@@ -362,9 +377,13 @@
           </select>
         </div>
         <div class="field"><label>Fecha de afiliación AFP</label><input type="date" name="fecha_afiliacion_afp"></div>
+        <div class="field full">
+          <label class="required">Certificado de afiliación AFP</label>
+          <input type="file" name="cert_afp" id="cert_afp" accept=".pdf,.jpg,.jpeg,.png" required>
+        </div>
         <div class="field">
-          <label>Sistema de salud</label>
-          <select name="sistema_salud" id="sistema_salud">
+          <label class="required">Sistema de salud</label>
+          <select name="sistema_salud" id="sistema_salud" required>
             <option value=""></option>
             <option>Fonasa</option>
             <option>Isapre</option>
@@ -372,8 +391,13 @@
         </div>
         <div class="field"><label>Nombre Isapre y N° de Plan</label><input type="text" name="isapre_plan"></div>
         <div class="field"><label>Valor plan de salud</label><input type="text" name="valor_plan_salud" placeholder="UF"></div>
+        <div class="field full" id="cert_salud_wrap">
+          <label id="cert_salud_label" class="required">Certificado Isapre (Plan o FUN)</label>
+          <input type="file" name="cert_salud" id="cert_salud" accept=".pdf,.jpg,.jpeg,.png">
+          <span class="note" id="cert_salud_note" style="margin:2px 0 0;">No aplica si tu sistema de salud es Fonasa.</span>
+        </div>
       </div>
-      <p class="note">*Es imprescindible enviar por correo a RRHH los certificados de afiliación a la AFP y de la Isapre (Fonasa no es necesario) — este formulario no adjunta archivos.</p>
+      <p class="note">Formatos aceptados: PDF, JPG o PNG — tamaño máximo 4 MB por archivo.</p>
     </fieldset>
 
     <fieldset>
@@ -473,7 +497,7 @@
 
     <div class="consent">
       <label>
-        <input type="checkbox" name="declaracion" required>
+        <input type="checkbox" name="declaracion" value="Sí" required>
         <span>Declaro que la información entregada en este formulario es veraz y autorizo a TOOLTEK SpA a utilizarla para los fines administrativos, previsionales y de pago correspondientes a mi ingreso como trabajador/a.</span>
       </label>
     </div>
@@ -568,10 +592,37 @@
   });
   // ---------- Fin cuadro de firma ----------
 
-  // Mostrar/ocultar campo de Isapre según selección
-  document.getElementById('sistema_salud').addEventListener('change', function(){
-    // Campo siempre visible; solo es informativo, no se oculta para simplicidad y accesibilidad.
-  });
+  // ---------- Certificado de salud obligatorio solo si es Isapre ----------
+  const sistemaSalud = document.getElementById('sistema_salud');
+  const certSalud = document.getElementById('cert_salud');
+  const certSaludNote = document.getElementById('cert_salud_note');
+  function toggleCertSalud(){
+    if (sistemaSalud.value === 'Isapre') {
+      certSalud.required = true;
+      certSaludNote.textContent = 'Adjunta el Plan o FUN de tu Isapre.';
+    } else {
+      certSalud.required = false;
+      certSaludNote.textContent = 'No aplica si tu sistema de salud es Fonasa.';
+    }
+  }
+  sistemaSalud.addEventListener('change', toggleCertSalud);
+  toggleCertSalud();
+
+  // ---------- Adjuntar archivos como base64 ----------
+  const MAX_FILE_MB = 4;
+  function fileToBase64(file){
+    return new Promise((resolve, reject) => {
+      if (!file) { resolve(null); return; }
+      if (file.size > MAX_FILE_MB * 1024 * 1024) {
+        reject(new Error('El archivo "' + file.name + '" supera los ' + MAX_FILE_MB + ' MB permitidos.'));
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => resolve({ base64: reader.result, filename: file.name });
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo "' + file.name + '".'));
+      reader.readAsDataURL(file);
+    });
+  }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -593,7 +644,9 @@
 
     const data = new FormData(form);
     const payload = {};
+    const fileFields = ['cert_afp', 'cert_salud'];
     data.forEach((value, key) => {
+      if (fileFields.includes(key)) return; // se procesan aparte como base64
       if (payload[key] !== undefined) {
         payload[key] = payload[key] + '; ' + value;
       } else {
@@ -606,10 +659,24 @@
     btn.disabled = true;
     btn.textContent = 'Enviando...';
 
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'text/plain;charset=utf-8'},
-      body: JSON.stringify(payload)
+    Promise.all([
+      fileToBase64(document.getElementById('cert_afp').files[0]),
+      fileToBase64(document.getElementById('cert_salud').files[0])
+    ])
+    .then(([certAfp, certSalud]) => {
+      if (certAfp) {
+        payload.cert_afp_base64 = certAfp.base64;
+        payload.cert_afp_filename = certAfp.filename;
+      }
+      if (certSalud) {
+        payload.cert_salud_base64 = certSalud.base64;
+        payload.cert_salud_filename = certSalud.filename;
+      }
+      return fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
+      });
     })
     .then(res => res.json())
     .then(res => {
